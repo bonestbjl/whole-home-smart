@@ -19,6 +19,7 @@ import {
 } from './diagnosis'
 import type { DiagnosisAnswers } from './diagnosis'
 import AdminApp from './admin/AdminApp'
+import { visuals } from './visualAssets'
 import './App.css'
 
 type AnswerKey = keyof DiagnosisAnswers
@@ -94,7 +95,7 @@ function HomePage() {
   return (
     <>
       <section className="hero-section page-home">
-        <img src={homeScene.image} alt="夜间高级现代住宅回家场景" className="hero-bg" />
+        <img src={homeScene.image} alt="夜间高级现代住宅回家场景" className="hero-bg" style={{ objectPosition: homeScene.imagePosition }} />
         <div className="hero-shade" />
         <div className="hero-content reveal">
           <p className="eyebrow">Home Intelligence Diagnosis</p>
@@ -320,6 +321,12 @@ function DiagnosisResultPage() {
           </div>
         </div>
 
+        <div className="result-visual-strip">
+          {[visuals.homecomingHero, visuals.nightPathLight, visuals.smartControlPanel].map((asset) => (
+            <img key={asset.module} src={asset.src} alt={asset.alt} style={{ objectPosition: asset.position }} />
+          ))}
+        </div>
+
         <div className="score-grid">
           {[
             ['便利体验', report.scores.convenience],
@@ -392,7 +399,7 @@ function ExperiencePage() {
             ))}
           </div>
           <div className="scene-stage">
-            <img src={day.image} alt={`${day.title}住宅场景`} />
+            <img src={day.image} alt={`${day.title}住宅场景`} style={{ objectPosition: day.imagePosition }} />
             <div className="scene-overlay" />
             <div className="scene-copy">
               <p>{day.time}</p>
@@ -421,7 +428,7 @@ function ExperiencePage() {
             ))}
           </div>
           <article className="lab-detail">
-            <img src={lab.image} alt={`${lab.title}智能场景`} />
+            <img src={lab.image} alt={`${lab.title}智能场景`} style={{ objectPosition: lab.imagePosition }} />
             <div className="lab-flow">
               <p>{lab.action}</p>
               <h3>{lab.title}</h3>
@@ -469,7 +476,7 @@ function CasesPage() {
       <div className="case-grid reveal">
         {visibleCases.map((item) => (
           <article key={item.id}>
-            <img src={item.image} alt={item.place} />
+            <img src={item.image} alt={item.place} style={{ objectPosition: item.imagePosition }} />
             <div>
               <p>{item.category} · {item.place}</p>
               <h3>{item.area} · {item.family}</h3>
@@ -498,7 +505,7 @@ function CaseDetailPage() {
   return (
     <section className="section case-detail-page">
       <div className="case-detail-hero reveal">
-        <img src={item.image} alt={item.place} />
+        <img src={item.image} alt={item.place} style={{ objectPosition: item.imagePosition }} />
         <div>
           <p className="eyebrow">{item.category}</p>
           <h1>{item.place}</h1>
@@ -554,7 +561,7 @@ function SolutionsPage() {
             ))}
           </div>
           <article className="system-preview">
-            <img src={system.image} alt={system.title} />
+            <img src={system.image} alt={system.title} style={{ objectPosition: system.imagePosition }} />
             <div>
               <h3>{system.title}</h3>
               <p>{system.solution}</p>
@@ -623,6 +630,7 @@ function BookingPage() {
         <p className="eyebrow">Book A Private Consultation</p>
         <h2>让设计师看看，你的家适合怎样做智能升级。</h2>
         <p>预约后可以获得家庭需求分析、户型智能点位建议、场景规划建议、设备配置建议和预算区间建议。</p>
+        <img className="booking-visual" src={visuals.smartControlPanel.src} alt={visuals.smartControlPanel.alt} style={{ objectPosition: visuals.smartControlPanel.position }} />
         <div className="booking-benefits">
           {['家庭需求分析', '户型智能点位建议', '场景规划建议', '设备配置建议', '预算区间建议'].map((item) => (
             <span key={item}>{item}</span>

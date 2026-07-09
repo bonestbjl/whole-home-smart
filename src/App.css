@@ -503,6 +503,24 @@ button {
   margin-top: 20px;
 }
 
+.result-visual-strip {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  gap: 12px;
+  margin: 24px 0;
+}
+
+.result-visual-strip img,
+.booking-visual {
+  width: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.result-visual-strip img {
+  aspect-ratio: 16 / 10;
+}
+
 .day-experience {
   display: grid;
   grid-template-columns: 230px minmax(0, 1fr);
@@ -1010,7 +1028,11 @@ button {
   overflow: hidden;
 }
 
-.case-grid img,
+.case-grid img {
+  aspect-ratio: 16 / 10;
+  height: auto;
+}
+
 .product-grid img {
   aspect-ratio: 4 / 3;
   height: auto;
@@ -1180,6 +1202,12 @@ button {
 .booking-copy {
   position: sticky;
   top: 120px;
+}
+
+.booking-visual {
+  aspect-ratio: 3 / 2;
+  margin: 24px 0 4px;
+  border: 1px solid rgba(242, 240, 234, 0.12);
 }
 
 .booking-form {
@@ -1385,6 +1413,7 @@ button {
   .timeline,
   .device-panel,
   .before-after-panel,
+  .result-visual-strip,
   .system-preview,
   .option-grid,
   .score-grid,

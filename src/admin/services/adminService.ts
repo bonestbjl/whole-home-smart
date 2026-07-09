@@ -2,6 +2,8 @@ import { initialAdminData } from '../mockData'
 import type { AdminData, Booking, CaseStudy, FollowUpRecord, LeadStatus, MerchantSettings } from '../types'
 
 const adminStorageKey = 'smart-home-admin-data'
+const adminStorageVersionKey = 'smart-home-admin-data-version'
+const adminDataVersion = 'visual-system-v2'
 
 function cloneData(data: AdminData): AdminData {
   return JSON.parse(JSON.stringify(data)) as AdminData
@@ -9,6 +11,9 @@ function cloneData(data: AdminData): AdminData {
 
 export const adminService = {
   load(): AdminData {
+    if (localStorage.getItem(adminStorageVersionKey) !== adminDataVersion) {
+      return this.reset()
+    }
     const raw = localStorage.getItem(adminStorageKey)
     if (!raw) {
       const data = cloneData(initialAdminData)
@@ -20,11 +25,13 @@ export const adminService = {
 
   save(data: AdminData) {
     localStorage.setItem(adminStorageKey, JSON.stringify(data))
+    localStorage.setItem(adminStorageVersionKey, adminDataVersion)
   },
 
   reset() {
     const data = cloneData(initialAdminData)
     localStorage.setItem(adminStorageKey, JSON.stringify(data))
+    localStorage.setItem(adminStorageVersionKey, adminDataVersion)
     return data
   },
 }

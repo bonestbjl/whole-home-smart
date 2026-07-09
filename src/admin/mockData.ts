@@ -1,4 +1,5 @@
 import { buildDiagnosisReport, defaultDiagnosisAnswers } from '../diagnosis'
+import { visuals } from '../visualAssets'
 import type { AdminData, Booking, CaseStudy, DiagnosisRecord, FollowUpRecord, Lead, MerchantSettings, SolutionPlan } from './types'
 import { calculateLeadScore, getIntentLevel } from './scoringRules'
 
@@ -117,8 +118,8 @@ const bookings: Booking[] = [
 ]
 
 const cases: CaseStudy[] = [
-  { id: 'C-0001', name: '无锡 128㎡ 三口之家舒适安全改造', city: '无锡', community: '太湖雍华府', area: '128㎡', layout: '三室两厅', familyMembers: '夫妻 + 儿童', painPoints: '孩子到家提醒、夜间柔光、离家安全焦虑。', planType: '舒适安全型', deviceCount: 42, sceneCount: 11, dailyAutomationCount: 18, intro: '以家庭安全和日常省心为核心的三口之家方案。', solution: '门锁、灯光、窗帘、环境监测和儿童房联动。', lifeChanges: '孩子到家可提醒，夜间起床柔光自动亮起，离家后状态统一确认。', image: 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1200&q=84', tags: ['三口之家', '儿童照护'], status: '上架', sort: 1, featured: true },
-  { id: 'C-0002', name: '苏州 168㎡ 有老人家庭照护系统', city: '苏州', community: '湖滨四季', area: '168㎡', layout: '四室两厅', familyMembers: '夫妻 + 老人', painPoints: '老人夜间起床、燃气安全、异常提醒。', planType: '照护安全型', deviceCount: 58, sceneCount: 16, dailyAutomationCount: 26, intro: '围绕老人照护和厨房安全建立稳定联动。', solution: '老人房夜间路径灯、燃气复核、异常静止提醒。', lifeChanges: '老人夜间通行更安全，家属远程焦虑降低。', image: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=84', tags: ['老人家庭', '大平层'], status: '上架', sort: 2, featured: true },
+  { id: 'C-0001', name: '无锡 128㎡ 三口之家舒适安全改造', city: '无锡', community: '太湖雍华府', area: '128㎡', layout: '三室两厅', familyMembers: '夫妻 + 儿童', painPoints: '孩子到家提醒、夜间柔光、离家安全焦虑。', planType: '舒适安全型', deviceCount: 42, sceneCount: 11, dailyAutomationCount: 18, intro: '以家庭安全和日常省心为核心的三口之家方案。', solution: '门锁、灯光、窗帘、环境监测和儿童房联动。', lifeChanges: '孩子到家可提醒，夜间起床柔光自动亮起，离家后状态统一确认。', image: visuals.childRoomCare.src, tags: ['三口之家', '儿童照护'], status: '上架', sort: 1, featured: true },
+  { id: 'C-0002', name: '苏州 168㎡ 有老人家庭照护系统', city: '苏州', community: '湖滨四季', area: '168㎡', layout: '四室两厅', familyMembers: '夫妻 + 老人', painPoints: '老人夜间起床、燃气安全、异常提醒。', planType: '照护安全型', deviceCount: 58, sceneCount: 16, dailyAutomationCount: 26, intro: '围绕老人照护和厨房安全建立稳定联动。', solution: '老人房夜间路径灯、燃气复核、异常静止提醒。', lifeChanges: '老人夜间通行更安全，家属远程焦虑降低。', image: visuals.elderCarePath.src, tags: ['老人家庭', '大平层'], status: '上架', sort: 2, featured: true },
 ]
 
 const solutions: SolutionPlan[] = [
