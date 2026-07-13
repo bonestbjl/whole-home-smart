@@ -1,8 +1,8 @@
 import { createContext, useContext, useState } from 'react'
 import type { FormEvent, ReactNode } from 'react'
-import { Link, NavLink, Route, Routes, useNavigate, useParams } from 'react-router-dom'
-import { adminService, withBooking, withCaseStudy, withFollowUp, withLeadStatus, withSettings, withoutCaseStudy } from './services/adminService'
-import type { AdminData, Booking, BookingStatus, BookingType, CaseStudy, FollowUpRecord, FollowUpType, Lead, LeadStatus, MerchantSettings } from './types'
+import { Link, Navigate, NavLink, Route, Routes, useNavigate, useParams } from 'react-router-dom'
+import { adminService, withBooking, withContentTopicStatus, withFollowUp, withInfluencer, withLeadStatus, withSettings } from './services/adminService'
+import type { AdminData, Booking, BookingStatus, BookingType, ContentTopicStatus, FollowUpRecord, FollowUpType, Influencer, InfluencerCategory, InfluencerPlatform, InfluencerStatus, Lead, LeadStatus, MerchantSettings } from './types'
 import './Admin.css'
 
 const leadStatuses: LeadStatus[] = ['新线索', '待联系', '已联系', '持续跟进', '已预约', '方案设计中', '已报价', '已成交', '暂时搁置', '无效线索']
@@ -35,6 +35,7 @@ export default function AdminApp() {
     <AdminContext.Provider value={{ data, setData }}>
       <Routes>
         <Route path="login" element={<AdminLogin />} />
+        <Route path="cases/*" element={<Navigate replace to="/admin" />} />
         <Route path="*" element={<AdminShell />} />
       </Routes>
     </AdminContext.Provider>
@@ -70,7 +71,8 @@ function AdminShell() {
     ['智能诊断', '/admin/diagnosis'],
     ['预约管理', '/admin/bookings'],
     ['客户管理', '/admin/customers'],
-    ['案例管理', '/admin/cases'],
+    ['本地达人合作', '/admin/influencers'],
+    ['每月内容选题', '/admin/topics'],
     ['解决方案', '/admin/solutions'],
     ['数据分析', '/admin/analytics'],
     ['系统设置', '/admin/settings'],
@@ -107,9 +109,8 @@ function AdminShell() {
           <Route path="diagnosis" element={<DiagnosisAdminPage />} />
           <Route path="bookings" element={<BookingsPage />} />
           <Route path="customers" element={<CustomersPage />} />
-          <Route path="cases" element={<CasesAdminPage />} />
-          <Route path="cases/new" element={<CaseEditorPage />} />
-          <Route path="cases/:id/edit" element={<CaseEditorPage />} />
+          <Route path="influencers" element={<InfluencersPage />} />
+          <Route path="topics" element={<TopicsPage />} />
           <Route path="solutions" element={<SolutionsAdminPage />} />
           <Route path="analytics" element={<AnalyticsPage />} />
           <Route path="settings" element={<SettingsPage />} />
@@ -122,6 +123,7 @@ function AdminShell() {
 function Dashboard() {
   const { data } = useAdmin()
   const stats = getDashboardStats(data)
+  const operations = getOperationStats(data)
   const latestLeads = [...data.leads].sort((a, b) => b.submittedAt.localeCompare(a.submittedAt)).slice(0, 5)
   const todos = data.leads.filter((lead) => !['已成交', '无效线索'].includes(lead.status)).slice(0, 5)
 
@@ -159,6 +161,26 @@ function Dashboard() {
         </AdminCard>
         <AdminCard title="转化漏斗">
           <Funnel data={data} />
+        </AdminCard>
+      </div>
+      <div className="admin-grid two">
+        <AdminCard title="本地达人合作">
+          <div className="operation-summary">
+            <div><span>本地达人数量</span><strong>{operations.influencers}</strong></div>
+            <div><span>待沟通达人</span><strong>{operations.waitingInfluencers}</strong></div>
+            <div><span>本月计划合作</span><strong>{operations.plannedCollaborations}</strong></div>
+            <div><span>已合作达人</span><strong>{operations.activeInfluencers}</strong></div>
+          </div>
+          <Link className="admin-primary" to="/admin/influencers">查看达人资源</Link>
+        </AdminCard>
+        <AdminCard title="每月内容选题">
+          <div className="operation-summary">
+            <div><span>本月选题数</span><strong>{operations.topics}</strong></div>
+            <div><span>待拍摄</span><strong>{operations.pendingShoot}</strong></div>
+            <div><span>已发布</span><strong>{operations.publishedTopics}</strong></div>
+            <div><span>达人合作内容</span><strong>{operations.influencerTopics}</strong></div>
+          </div>
+          <Link className="admin-primary" to="/admin/topics">查看本月选题</Link>
         </AdminCard>
       </div>
       <AdminCard title="最新线索">
@@ -485,77 +507,170 @@ function CustomersPage() {
   )
 }
 
-function CasesAdminPage() {
+const influencerPlatforms: InfluencerPlatform[] = ['抖音', '小红书', '视频号', '快手', '本地社群', '其他']
+const influencerCategories: InfluencerCategory[] = ['同城生活', '家居装修', '探店达人', '设计美学', '亲子家庭', '房产楼盘', '本地网红', '其他']
+const influencerStatuses: InfluencerStatus[] = ['待沟通', '已联系', '有意向', '已合作', '长期合作', '暂不合适']
+const topicStatuses: ContentTopicStatus[] = ['未开始', '准备中', '已拍摄', '已发布', '效果复盘']
+
+function InfluencersPage() {
   const { data, setData } = useAdmin()
+  const [filters, setFilters] = useState({ platform: '全部', category: '全部', status: '全部', followers: '全部', city: '全部' })
+  const [creating, setCreating] = useState(false)
+  const [selectedId, setSelectedId] = useState(data.influencers[0]?.id ?? '')
+  const cities = Array.from(new Set(data.influencers.map((item) => item.city)))
+  const filtered = data.influencers.filter((item) => (
+    matchFilter(filters.platform, item.platform) &&
+    matchFilter(filters.category, item.category) &&
+    matchFilter(filters.status, item.status) &&
+    matchFilter(filters.city, item.city) &&
+    (filters.followers === '全部' || (filters.followers === '10 万以下' ? parseFollowers(item.followers) < 100000 : parseFollowers(item.followers) >= 100000))
+  ))
+  const selected = data.influencers.find((item) => item.id === selectedId) ?? filtered[0]
+
+  const addInfluencer = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    const form = Object.fromEntries(new FormData(event.currentTarget))
+    const influencer: Influencer = {
+      id: `I-${Date.now()}`,
+      name: String(form.name),
+      platform: String(form.platform) as InfluencerPlatform,
+      category: String(form.category) as InfluencerCategory,
+      followers: String(form.followers),
+      city: String(form.city),
+      focus: String(form.focus),
+      status: String(form.status) as InfluencerStatus,
+      quoteRange: String(form.quoteRange),
+      contact: String(form.contact),
+      accountLink: String(form.accountLink),
+      lastCollaborationAt: '未合作',
+      notes: String(form.notes),
+      suitableContent: String(form.suitableContent).split(/[，,]/).map((item) => item.trim()).filter(Boolean),
+      communicationHistory: ['刚刚新增，等待运营顾问完成首次沟通。'],
+      cooperationSuggestion: String(form.cooperationSuggestion),
+    }
+    setData(withInfluencer(data, influencer))
+    setSelectedId(influencer.id)
+    setCreating(false)
+    event.currentTarget.reset()
+  }
+
+  const updateFilter = (key: keyof typeof filters, value: string) => setFilters({ ...filters, [key]: value })
+
   return (
-    <AdminPage title="案例管理" desc="维护前台案例内容、排序、推荐和上下架。">
+    <AdminPage title="本地达人合作" desc="沉淀本地家居、探店、同城生活和家庭内容资源，让合作动作围绕有效获客展开。">
+      <section className="admin-filters influencer-filters">
+        <Select value={filters.platform} onChange={(value) => updateFilter('platform', value)} options={['全部', ...influencerPlatforms]} />
+        <Select value={filters.category} onChange={(value) => updateFilter('category', value)} options={['全部', ...influencerCategories]} />
+        <Select value={filters.status} onChange={(value) => updateFilter('status', value)} options={['全部', ...influencerStatuses]} />
+        <Select value={filters.followers} onChange={(value) => updateFilter('followers', value)} options={['全部', '10 万以下', '10 万及以上']} />
+        <Select value={filters.city} onChange={(value) => updateFilter('city', value)} options={['全部', ...cities]} />
+      </section>
       <div className="admin-toolbar">
-        <Link className="admin-primary" to="/admin/cases/new">新增案例</Link>
+        <span>共 {filtered.length} 位可用达人</span>
+        <button className="admin-primary" onClick={() => setCreating((value) => !value)} type="button">{creating ? '收起新增' : '新增达人'}</button>
       </div>
-      <table className="admin-table">
-        <thead><tr>{['案例名称', '城市', '面积', '家庭成员', '方案类型', '设备', '场景', '标签', '状态', '排序', '首页推荐', '操作'].map((item) => <th key={item}>{item}</th>)}</tr></thead>
-        <tbody>
-          {data.cases.map((item) => (
-            <tr key={item.id}>
-              <td>{item.name}</td><td>{item.city}</td><td>{item.area}</td><td>{item.familyMembers}</td><td>{item.planType}</td><td>{item.deviceCount}</td><td>{item.sceneCount}</td><td>{item.tags.join(' / ')}</td><td>{item.status}</td><td>{item.sort}</td><td>{item.featured ? '是' : '否'}</td>
-              <td className="table-actions"><Link to={`/admin/cases/${item.id}/edit`}>编辑</Link><button onClick={() => setData(withoutCaseStudy(data, item.id))} type="button">删除</button></td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      {creating && (
+        <AdminCard title="新增达人资源">
+          <form className="admin-form influencer-form" onSubmit={addInfluencer}>
+            <input name="name" placeholder="达人名称" required />
+            <Select name="platform" options={influencerPlatforms} />
+            <Select name="category" options={influencerCategories} />
+            <input name="followers" placeholder="粉丝量，例如 8.2 万" required />
+            <input name="city" placeholder="城市" required />
+            <input name="focus" placeholder="内容方向" required />
+            <Select name="status" options={influencerStatuses} />
+            <input name="quoteRange" placeholder="报价区间" required />
+            <input name="contact" placeholder="联系方式" required />
+            <input name="accountLink" placeholder="账号链接（mock 链接即可）" required />
+            <input name="suitableContent" placeholder="适合内容，用逗号分隔" required />
+            <textarea name="notes" placeholder="备注" />
+            <textarea name="cooperationSuggestion" placeholder="合作建议" required />
+            <button className="admin-primary" type="submit">保存达人</button>
+          </form>
+        </AdminCard>
+      )}
+      <div className="influencer-grid">
+        {filtered.map((item) => (
+          <button className={selected?.id === item.id ? 'influencer-card active' : 'influencer-card'} key={item.id} onClick={() => setSelectedId(item.id)} type="button">
+            <div><strong>{item.name}</strong><StatusBadge status={item.status} /></div>
+            <span>{item.platform} · {item.category} · {item.city}</span>
+            <b>{item.followers}</b>
+            <p>{item.focus}</p>
+            <div className="scene-pills">{item.suitableContent.map((content) => <span key={content}>{content}</span>)}</div>
+            <small>报价：{item.quoteRange} · 最近合作：{item.lastCollaborationAt}</small>
+          </button>
+        ))}
+      </div>
+      {selected && (
+        <AdminCard title={`${selected.name} · 合作详情`}>
+          <div className="admin-grid two">
+            <InfoGrid items={{ 平台: selected.platform, 账号类型: selected.category, 粉丝量: selected.followers, 城市: selected.city, 联系方式: selected.contact, 账号链接: selected.accountLink, 报价区间: selected.quoteRange, 最近合作时间: selected.lastCollaborationAt }} />
+            <div className="cooperation-detail"><h3>合作建议</h3><p>{selected.cooperationSuggestion}</p><h3>备注</h3><p>{selected.notes || '暂无补充备注。'}</p></div>
+          </div>
+          <div className="admin-grid two detail-spaced">
+            <div><h3>适合合作内容</h3><div className="scene-pills">{selected.suitableContent.map((content) => <span key={content}>{content}</span>)}</div></div>
+            <div><h3>历史沟通记录</h3><div className="communication-list">{selected.communicationHistory.length ? selected.communicationHistory.map((item) => <p key={item}>{item}</p>) : <p>尚未开始沟通。</p>}</div></div>
+          </div>
+        </AdminCard>
+      )}
     </AdminPage>
   )
 }
 
-function CaseEditorPage() {
-  const { id } = useParams()
+function TopicsPage() {
   const { data, setData } = useAdmin()
-  const navigate = useNavigate()
-  const editing = data.cases.find((item) => item.id === id)
-
-  const saveCase = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    const form = Object.fromEntries(new FormData(event.currentTarget))
-    const caseStudy: CaseStudy = {
-      id: editing?.id ?? `C-${Date.now()}`,
-      name: String(form.name),
-      city: String(form.city),
-      community: String(form.community),
-      area: String(form.area),
-      layout: String(form.layout),
-      familyMembers: String(form.familyMembers),
-      painPoints: String(form.painPoints),
-      planType: String(form.planType),
-      deviceCount: Number(form.deviceCount),
-      sceneCount: Number(form.sceneCount),
-      dailyAutomationCount: Number(form.dailyAutomationCount),
-      intro: String(form.intro),
-      solution: String(form.solution),
-      lifeChanges: String(form.lifeChanges),
-      image: String(form.image),
-      tags: String(form.tags).split(/[，,]/).map((tag) => tag.trim()).filter(Boolean),
-      status: String(form.status) as CaseStudy['status'],
-      sort: Number(form.sort),
-      featured: form.featured === 'on',
-    }
-    setData(withCaseStudy(data, caseStudy))
-    navigate('/admin/cases')
-  }
+  const [selectedId, setSelectedId] = useState(data.contentTopics[0]?.id ?? '')
+  const selected = data.contentTopics.find((item) => item.id === selectedId) ?? data.contentTopics[0]
+  const updateTopicStatus = (topicId: string, status: string) => setData(withContentTopicStatus(data, topicId, status as ContentTopicStatus))
 
   return (
-    <AdminPage title={editing ? '编辑案例' : '新增案例'} desc="案例结构与前台案例页保持一致。">
-      <form className="admin-form case-form" onSubmit={saveCase}>
-        {[
-          ['name', '案例名称'], ['city', '城市'], ['community', '小区'], ['area', '面积'], ['layout', '户型'], ['familyMembers', '家庭成员'], ['planType', '方案类型'], ['deviceCount', '设备数量'], ['sceneCount', '场景数量'], ['dailyAutomationCount', '每日自动执行次数'], ['image', '图片 URL'], ['tags', '标签，用逗号分隔'], ['sort', '排序'],
-        ].map(([name, placeholder]) => <input defaultValue={String(editing?.[name as keyof CaseStudy] ?? '')} key={name} name={name} placeholder={placeholder} />)}
-        <textarea defaultValue={editing?.painPoints} name="painPoints" placeholder="客户痛点" />
-        <textarea defaultValue={editing?.intro} name="intro" placeholder="案例介绍" />
-        <textarea defaultValue={editing?.solution} name="solution" placeholder="解决方案" />
-        <textarea defaultValue={editing?.lifeChanges} name="lifeChanges" placeholder="生活变化" />
-        <Select name="status" defaultValue={editing?.status ?? '上架'} options={['上架', '下架']} />
-        <label className="check-row"><input defaultChecked={editing?.featured} name="featured" type="checkbox" /> 首页推荐</label>
-        <button className="admin-primary" type="submit">保存案例</button>
-      </form>
+    <AdminPage title="每月内容选题" desc="把抖音、小红书、朋友圈、视频号和达人合作组织成一套可执行的本月获客计划。">
+      <div className="admin-metrics content-overview">
+        <Metric label="短视频建议" value="12 条" />
+        <Metric label="小红书图文" value="8 篇" />
+        <Metric label="朋友圈内容" value="16 条" />
+        <Metric label="达人合作内容" value="2 条" />
+        <Metric label="直播 / 门店活动" value="1 场" />
+      </div>
+      <AdminCard title="本月选题日历">
+        <div className="topic-calendar">
+          {data.contentCalendar.map((week) => {
+            const topics = week.topicIds.map((id) => data.contentTopics.find((item) => item.id === id)).filter(Boolean)
+            return (
+              <section key={week.id}>
+                <h3>{week.label}<span>{week.theme}</span></h3>
+                {topics.map((topic) => topic && <button key={topic.id} onClick={() => setSelectedId(topic.id)} type="button"><b>{topic.platform} · {topic.type}</b><span>{topic.title}</span><StatusBadge status={topic.status} /></button>)}
+              </section>
+            )
+          })}
+        </div>
+      </AdminCard>
+      <AdminCard title="选题列表">
+        <div className="admin-table-wrap">
+          <table className="admin-table topic-table">
+            <thead><tr>{['标题', '平台', '内容类型', '适合发布时间', '内容目标', '对应客户痛点', '推荐拍摄场景', '脚本要点', '状态'].map((item) => <th key={item}>{item}</th>)}</tr></thead>
+            <tbody>
+              {data.contentTopics.map((topic) => (
+                <tr key={topic.id}>
+                  <td><button className="text-action" onClick={() => setSelectedId(topic.id)} type="button">{topic.title}</button></td>
+                  <td>{topic.platform}</td><td>{topic.type}</td><td>{topic.bestPublishTime}</td><td>{topic.goal}</td><td>{topic.painPoint}</td><td>{topic.shootingScene}</td><td>{topic.scriptPoints}</td>
+                  <td><Select value={topic.status} onChange={(value) => updateTopicStatus(topic.id, value)} options={topicStatuses} /></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </AdminCard>
+      {selected && (
+        <AdminCard title="选题详情">
+          <div className="topic-detail-head"><div><span>{selected.platform} · {selected.type}</span><h2>{selected.title}</h2></div><Select value={selected.status} onChange={(value) => updateTopicStatus(selected.id, value)} options={topicStatuses} /></div>
+          <div className="admin-grid two">
+            <InfoGrid items={{ 目标客户: selected.targetCustomer, 内容定位: selected.goal, 对应痛点: selected.painPoint, 适合发布时间: selected.bestPublishTime, 推荐拍摄场景: selected.shootingScene, 对应前台链接建议: selected.frontendLink }} />
+            <div className="cooperation-detail"><h3>开头钩子</h3><p>{selected.hook}</p><h3>拍摄画面建议</h3><p>{selected.filmingGuide}</p></div>
+          </div>
+          <div className="topic-script"><h3>脚本文案</h3><p>{selected.script}</p><h3>结尾 CTA</h3><p>{selected.cta}</p></div>
+        </AdminCard>
+      )}
     </AdminPage>
   )
 }
@@ -612,6 +727,7 @@ function AnalyticsPage() {
 function SettingsPage() {
   const { data, setData } = useAdmin()
   const [saved, setSaved] = useState(false)
+  const [serviceMessage, setServiceMessage] = useState('')
   const save = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const form = Object.fromEntries(new FormData(event.currentTarget))
@@ -631,6 +747,24 @@ function SettingsPage() {
         <button className="admin-primary" type="submit">保存设置</button>
         {saved && <p className="admin-success">设置已保存。</p>}
       </form>
+      <section className="content-service-note">
+        <div>
+          <span>案例内容服务</span>
+          <h2>案例展示由运营团队统一维护</h2>
+          <p>为了保证前台展示效果和转化质量，案例内容由运营团队统一整理、设计和发布。</p>
+          <ul>
+            <li>进阶版每月包含 3 次案例内容修改</li>
+            <li>支持案例图片替换与案例文案优化</li>
+            <li>支持新增客户故事整理</li>
+          </ul>
+          <p>需要新增、替换或优化案例时，请联系你的运营顾问。</p>
+        </div>
+        <div className="content-service-actions">
+          <button className="admin-primary" onClick={() => setServiceMessage('已为你生成联系运营顾问的请求，请在服务群内发送客户案例资料。')} type="button">联系运营顾问</button>
+          <button onClick={() => setServiceMessage('案例修改需求已记录，运营顾问会在下一个工作日与你确认。')} type="button">提交修改需求</button>
+          {serviceMessage && <p className="admin-success">{serviceMessage}</p>}
+        </div>
+      </section>
     </AdminPage>
   )
 }
@@ -710,6 +844,19 @@ function getDashboardStats(data: AdminData) {
   }
 }
 
+function getOperationStats(data: AdminData) {
+  return {
+    influencers: data.influencers.length,
+    waitingInfluencers: data.influencers.filter((item) => item.status === '待沟通').length,
+    plannedCollaborations: data.influencers.filter((item) => ['有意向', '已合作', '长期合作'].includes(item.status)).length,
+    activeInfluencers: data.influencers.filter((item) => ['已合作', '长期合作'].includes(item.status)).length,
+    topics: data.contentTopics.length,
+    pendingShoot: data.contentTopics.filter((item) => ['准备中', '已拍摄'].includes(item.status)).length,
+    publishedTopics: data.contentTopics.filter((item) => item.status === '已发布').length,
+    influencerTopics: data.contentTopics.filter((item) => item.platform === '本地达人').length,
+  }
+}
+
 function nextFollowTime(data: AdminData, leadId: string) {
   return data.followUps.find((item) => item.leadId === leadId)?.nextFollowTime || '待安排'
 }
@@ -733,6 +880,11 @@ function countList(items: string[]) {
 
 function rate(value: number, total: number) {
   return total ? Math.round((value / total) * 100) : 0
+}
+
+function parseFollowers(value: string) {
+  const amount = Number.parseFloat(value) || 0
+  return value.includes('万') ? amount * 10000 : amount
 }
 
 function scoreLabel(key: string) {

@@ -142,6 +142,64 @@ export type MerchantSettings = {
   budgetRanges: string
 }
 
+export type InfluencerPlatform = '抖音' | '小红书' | '视频号' | '快手' | '本地社群' | '其他'
+
+export type InfluencerCategory = '同城生活' | '家居装修' | '探店达人' | '设计美学' | '亲子家庭' | '房产楼盘' | '本地网红' | '其他'
+
+export type InfluencerStatus = '待沟通' | '已联系' | '有意向' | '已合作' | '长期合作' | '暂不合适'
+
+export type Influencer = {
+  id: string
+  name: string
+  platform: InfluencerPlatform
+  category: InfluencerCategory
+  followers: string
+  city: string
+  focus: string
+  status: InfluencerStatus
+  quoteRange: string
+  contact: string
+  accountLink: string
+  lastCollaborationAt: string
+  notes: string
+  suitableContent: string[]
+  communicationHistory: string[]
+  cooperationSuggestion: string
+}
+
+export type ContentPlatform = '抖音' | '小红书' | '朋友圈' | '视频号' | '本地达人'
+
+export type ContentType = '短视频' | '图文笔记' | '朋友圈' | '案例故事' | '客户问答' | '探店合作' | '直播预告'
+
+export type ContentTopicStatus = '未开始' | '准备中' | '已拍摄' | '已发布' | '效果复盘'
+
+export type ContentTopic = {
+  id: string
+  weekId: string
+  title: string
+  platform: ContentPlatform
+  type: ContentType
+  bestPublishTime: string
+  goal: string
+  painPoint: string
+  shootingScene: string
+  scriptPoints: string
+  status: ContentTopicStatus
+  targetCustomer: string
+  hook: string
+  filmingGuide: string
+  script: string
+  cta: string
+  frontendLink: string
+}
+
+export type ContentCalendarWeek = {
+  id: string
+  label: string
+  theme: string
+  topicIds: string[]
+}
+
 export type AdminData = {
   leads: Lead[]
   diagnosisRecords: DiagnosisRecord[]
@@ -149,6 +207,9 @@ export type AdminData = {
   bookings: Booking[]
   cases: CaseStudy[]
   solutions: SolutionPlan[]
+  influencers: Influencer[]
+  contentTopics: ContentTopic[]
+  contentCalendar: ContentCalendarWeek[]
   analytics: AnalyticsData
   settings: MerchantSettings
 }

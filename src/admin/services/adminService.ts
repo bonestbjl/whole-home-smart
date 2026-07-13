@@ -1,5 +1,5 @@
 import { initialAdminData } from '../mockData'
-import type { AdminData, Booking, CaseStudy, FollowUpRecord, LeadStatus, MerchantSettings } from '../types'
+import type { AdminData, Booking, CaseStudy, ContentTopicStatus, FollowUpRecord, Influencer, LeadStatus, MerchantSettings } from '../types'
 
 const adminStorageKey = 'smart-home-admin-data'
 const adminStorageVersionKey = 'smart-home-admin-data-version'
@@ -76,6 +76,25 @@ export function withoutCaseStudy(data: AdminData, id: string) {
 
 export function withSettings(data: AdminData, settings: MerchantSettings) {
   const next = { ...data, settings }
+  adminService.save(next)
+  return next
+}
+
+export function withInfluencer(data: AdminData, influencer: Influencer) {
+  const exists = data.influencers.some((item) => item.id === influencer.id)
+  const next = {
+    ...data,
+    influencers: exists ? data.influencers.map((item) => (item.id === influencer.id ? influencer : item)) : [influencer, ...data.influencers],
+  }
+  adminService.save(next)
+  return next
+}
+
+export function withContentTopicStatus(data: AdminData, topicId: string, status: ContentTopicStatus) {
+  const next = {
+    ...data,
+    contentTopics: data.contentTopics.map((item) => (item.id === topicId ? { ...item, status } : item)),
+  }
   adminService.save(next)
   return next
 }
