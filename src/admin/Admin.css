@@ -1,9 +1,16 @@
 .admin-app {
+  --admin-text: #18202a;
+  --admin-muted: #5f6c7b;
+  --admin-heading: #101820;
   min-height: 100vh;
   display: grid;
   grid-template-columns: 260px minmax(0, 1fr);
-  color: #18202a;
+  color: var(--admin-text);
   background: #f4f6f8;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.6;
 }
 
 .admin-sidebar {
@@ -23,6 +30,9 @@
   color: #fff;
   text-decoration: none;
   padding: 10px 12px 22px;
+  font-size: 15px;
+  font-weight: 580;
+  line-height: 1.3;
 }
 
 .admin-brand b {
@@ -44,6 +54,9 @@
   border-radius: 8px;
   color: rgba(223, 231, 239, 0.74);
   padding: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.35;
   text-decoration: none;
 }
 
@@ -74,11 +87,28 @@
 
 .admin-topbar button {
   display: none;
+  min-height: 36px;
+  border: 1px solid #cfd7e1;
+  border-radius: 7px;
+  padding: 0 11px;
+  color: #344455;
+  background: #fff;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 560;
+  line-height: 1;
 }
 
 .admin-topbar div {
   display: grid;
   margin-right: auto;
+}
+
+.admin-topbar strong {
+  color: var(--admin-heading);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.4;
 }
 
 .admin-topbar span,
@@ -87,12 +117,13 @@
 .admin-table span,
 .info-grid dt,
 .timeline-list span {
-  color: #687586;
+  color: var(--admin-muted);
 }
 
 .admin-topbar a {
   color: #41546a;
   text-decoration: none;
+  font-weight: 520;
 }
 
 .admin-page {
@@ -100,18 +131,27 @@
 }
 
 .admin-page-head {
-  margin-bottom: 22px;
+  max-width: 760px;
+  margin-bottom: 26px;
 }
 
 .admin-page h1 {
-  margin: 0 0 8px;
-  color: #101820;
-  font-size: 30px;
+  margin: 0 0 9px;
+  color: var(--admin-heading);
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.3;
   letter-spacing: 0;
+  text-wrap: balance;
 }
 
 .admin-page-head p {
   margin: 0;
+  max-width: 720px;
+  font-size: 14px;
+  font-weight: 420;
+  line-height: 1.65;
 }
 
 .admin-card,
@@ -132,8 +172,22 @@
 
 .admin-card h2 {
   margin: 0 0 16px;
-  color: #101820;
+  color: var(--admin-heading);
   font-size: 18px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.admin-card h3,
+.lead-board h3 {
+  color: var(--admin-heading);
+  font-size: 16px;
+  font-weight: 580;
+  line-height: 1.45;
+}
+
+.admin-card p {
+  line-height: 1.7;
 }
 
 .admin-grid {
@@ -162,15 +216,17 @@
 
 .admin-metrics span {
   display: block;
-  color: #687586;
+  color: var(--admin-muted);
   font-size: 13px;
 }
 
 .admin-metrics strong {
   display: block;
   margin-top: 8px;
-  color: #101820;
-  font-size: 30px;
+  color: var(--admin-heading);
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.2;
 }
 
 .admin-table-wrap {
@@ -185,6 +241,7 @@
   border-collapse: collapse;
   min-width: 980px;
   font-size: 14px;
+  line-height: 1.55;
 }
 
 .admin-card > .admin-table {
@@ -200,21 +257,22 @@
 }
 
 .admin-table th {
-  color: #687586;
+  color: var(--admin-muted);
   background: #f8fafc;
-  font-weight: 600;
+  font-weight: 560;
 }
 
 .admin-table td a {
   color: #1f5f99;
-  font-weight: 650;
+  font-weight: 580;
   text-decoration: none;
 }
 
 .admin-table td span {
   display: block;
   margin-top: 4px;
-  font-size: 12px;
+  font-size: 13px;
+  line-height: 1.5;
 }
 
 .admin-table.compact {
@@ -256,13 +314,15 @@
 .detail-actions button,
 .admin-toolbar button,
 .admin-toolbar a {
-  min-height: 40px;
+  min-height: 42px;
   border: 1px solid #d4dce6;
   border-radius: 8px;
   padding: 9px 11px;
   color: #17212c;
   background: #fff;
   font: inherit;
+  font-size: 14px;
+  line-height: 1.45;
 }
 
 .admin-form textarea {
@@ -274,11 +334,13 @@
   display: grid;
   gap: 6px;
   color: #4d5d70;
+  font-size: 14px;
+  font-weight: 520;
 }
 
 .admin-primary {
   display: inline-flex;
-  min-height: 40px;
+  min-height: 42px;
   align-items: center;
   justify-content: center;
   border: none;
@@ -286,7 +348,9 @@
   padding: 0 16px;
   color: #111820;
   background: #d9a955;
-  font-weight: 700;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
   text-decoration: none;
   cursor: pointer;
 }
@@ -302,7 +366,7 @@
 
 .admin-toolbar span {
   margin-right: auto;
-  color: #687586;
+  color: var(--admin-muted);
 }
 
 .admin-toolbar button.active {
@@ -332,15 +396,18 @@
 .topic-calendar button span,
 .topic-detail-head span {
   display: block;
-  color: #687586;
-  font-size: 12px;
+  color: var(--admin-muted);
+  font-size: 13px;
+  line-height: 1.45;
 }
 
 .operation-summary strong {
   display: block;
   margin-top: 5px;
   color: #101820;
-  font-size: 22px;
+  font-size: 21px;
+  font-weight: 600;
+  line-height: 1.2;
 }
 
 .influencer-form {
@@ -369,6 +436,7 @@
   background: #fff;
   text-align: left;
   font: inherit;
+  line-height: 1.55;
   cursor: pointer;
 }
 
@@ -387,6 +455,8 @@
 
 .influencer-card > b {
   color: #1f5f99;
+  font-size: 16px;
+  font-weight: 600;
 }
 
 .influencer-card p,
@@ -402,6 +472,8 @@
 .topic-script h3 {
   margin: 0 0 8px;
   font-size: 15px;
+  font-weight: 600;
+  line-height: 1.45;
 }
 
 .cooperation-detail h3 + p {
@@ -446,11 +518,13 @@
   margin: 0 0 2px;
   color: #17212c;
   font-size: 16px;
+  font-weight: 600;
+  line-height: 1.45;
 }
 
 .topic-calendar h3 span {
   margin-top: 5px;
-  font-weight: 400;
+  font-weight: 420;
 }
 
 .topic-calendar button {
@@ -476,8 +550,8 @@
 
 .topic-calendar button span:not(.status-badge) {
   color: #17212c;
-  font-weight: 650;
-  line-height: 1.5;
+  font-weight: 560;
+  line-height: 1.55;
 }
 
 .topic-table {
@@ -491,7 +565,8 @@
   background: transparent;
   text-align: left;
   font: inherit;
-  font-weight: 700;
+  font-weight: 580;
+  line-height: 1.55;
   cursor: pointer;
 }
 
@@ -507,6 +582,8 @@
   margin: 5px 0 0;
   color: #101820;
   font-size: 20px;
+  font-weight: 600;
+  line-height: 1.45;
 }
 
 .topic-script {
@@ -533,13 +610,15 @@
 .content-service-note > div > span {
   color: #8a6100;
   font-size: 13px;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .content-service-note h2 {
   margin: 7px 0 9px;
   color: #17212c;
   font-size: 21px;
+  font-weight: 600;
+  line-height: 1.4;
 }
 
 .content-service-note p,
@@ -572,7 +651,9 @@
   color: #6c4e12;
   background: #fff;
   font: inherit;
-  font-weight: 650;
+  font-size: 14px;
+  font-weight: 580;
+  line-height: 1;
   cursor: pointer;
 }
 
@@ -615,7 +696,8 @@
   border-radius: 999px;
   padding: 4px 9px;
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 600;
+  line-height: 1.35;
 }
 
 .intent-高意向 {
@@ -652,7 +734,8 @@
 .info-grid dd {
   margin: 4px 0 0;
   color: #16202b;
-  font-weight: 650;
+  font-weight: 560;
+  line-height: 1.55;
 }
 
 .scene-pills,
@@ -758,7 +841,7 @@
 
 .admin-success {
   color: #1f7d42;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .admin-login {
@@ -767,6 +850,8 @@
   place-items: center;
   color: #17212c;
   background: linear-gradient(135deg, #f5f7fa, #e7edf4);
+  font-family: var(--font-body);
+  line-height: 1.65;
 }
 
 .admin-login section {
@@ -779,7 +864,10 @@
 
 .admin-login h1 {
   margin: 8px 0;
-  font-size: 34px;
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 1.3;
 }
 
 @media (max-width: 1180px) {
@@ -824,11 +912,23 @@
 
 @media (max-width: 720px) {
   .admin-page {
-    padding: 18px;
+    padding: 22px 20px;
+  }
+
+  .admin-page h1 {
+    font-size: 25px;
+  }
+
+  .admin-page-head {
+    margin-bottom: 22px;
   }
 
   .admin-topbar {
     padding: 0 16px;
+  }
+
+  .admin-card {
+    padding: 18px;
   }
 
   .admin-topbar div span {

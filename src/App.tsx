@@ -99,10 +99,7 @@ function HomePage() {
         <div className="hero-shade" />
         <div className="hero-content reveal">
           <p className="eyebrow">Home Intelligence Diagnosis</p>
-          <h1>
-            你的家，
-            <span>真的了解你的生活吗？</span>
-          </h1>
+          <h1>你的家，真的了解你的生活吗？</h1>
           <p className="hero-copy">
             用 2 分钟完成家庭智能诊断，看看哪些重复动作、生活焦虑和家庭需求，其实可以交给家自动完成。
           </p>
@@ -133,10 +130,7 @@ function HomePage() {
       <section className="section value-section reveal">
         <div className="section-heading">
           <p className="eyebrow">Why Diagnose First</p>
-          <h2>
-            不是先看设备，
-            <span>而是先看你的生活里有哪些问题可以被解决。</span>
-          </h2>
+          <h2>不是先看设备，而是先看你的生活里有哪些问题可以被解决。</h2>
         </div>
         <div className="value-grid">
           {[
@@ -156,7 +150,7 @@ function HomePage() {
       <section className="generator-banner reveal">
         <div>
           <p className="eyebrow">Start With Your Home</p>
-          <h2>先完成诊断，再生成你的家庭智能报告。</h2>
+          <h2>先完成诊断，生成属于你的家庭智能报告。</h2>
           <p>诊断会从回家、离家、夜间生活和家庭成员需求出发，给出问题、评分、推荐场景和方案方向。</p>
         </div>
         <Link className="primary-button" to="/diagnosis">

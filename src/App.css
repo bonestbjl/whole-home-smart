@@ -1,6 +1,9 @@
 .app {
   min-height: 100vh;
   overflow-x: clip;
+  font-family: var(--font-body);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
   background:
     radial-gradient(circle at 70% 0%, rgba(188, 147, 82, 0.14), transparent 30rem),
     linear-gradient(180deg, #07090c 0%, #0b0e12 45%, #07090c 100%);
@@ -34,7 +37,7 @@
 .brand {
   gap: 12px;
   color: #f2f0ea;
-  font-weight: 600;
+  font-weight: var(--weight-heading);
   text-decoration: none;
 }
 
@@ -65,8 +68,10 @@ button {
 }
 
 .site-header nav a {
-  color: rgba(242, 240, 234, 0.72);
-  font-size: 14px;
+  color: rgba(245, 242, 235, 0.74);
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1;
   transition: color 0.2s ease;
 }
 
@@ -86,12 +91,15 @@ button {
 .case-grid button,
 .product-grid button {
   display: inline-flex;
-  min-height: 44px;
+  min-height: 48px;
   align-items: center;
   justify-content: center;
   border: 1px solid rgba(242, 240, 234, 0.18);
   border-radius: 8px;
   padding: 0 18px;
+  font-size: 15px;
+  font-weight: 560;
+  line-height: 1;
   cursor: pointer;
   transition:
     transform 0.2s ease,
@@ -104,7 +112,7 @@ button {
   border-color: rgba(226, 189, 118, 0.44);
   color: #0b0e12;
   background: linear-gradient(135deg, #f1d49b, #b8883f);
-  font-weight: 650;
+  font-weight: 600;
 }
 
 .ghost-button,
@@ -169,12 +177,13 @@ button {
 }
 
 .eyebrow {
-  margin: 0 0 14px;
-  color: #8db7d7;
+  margin: 0 0 16px;
+  color: rgba(160, 192, 214, 0.88);
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.18em;
   text-transform: uppercase;
+  line-height: 1.5;
 }
 
 .hero-content {
@@ -188,28 +197,27 @@ button {
 .result-head h2,
 .booking-copy h2 {
   margin: 0;
-  color: #f2f0ea;
-  font-weight: 520;
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
   letter-spacing: 0;
+  line-break: strict;
+  text-wrap: balance;
 }
 
 .hero-content h1 {
-  max-width: 780px;
-  font-size: clamp(48px, 8vw, 112px);
-  line-height: 0.98;
-}
-
-.hero-content h1 span,
-.section-heading h2 span {
-  display: block;
+  max-width: 840px;
+  font-size: var(--text-hero);
+  line-height: var(--leading-display);
 }
 
 .hero-copy {
-  max-width: 620px;
-  margin: 30px 0;
-  color: rgba(242, 240, 234, 0.78);
-  font-size: clamp(17px, 2vw, 22px);
-  line-height: 1.8;
+  max-width: 660px;
+  margin: 34px 0 32px;
+  color: var(--text-body-color);
+  font-size: var(--text-body-lg);
+  font-weight: 420;
+  line-height: 1.76;
 }
 
 .hero-actions {
@@ -231,21 +239,22 @@ button {
 .panel-top {
   justify-content: space-between;
   gap: 18px;
-  color: rgba(242, 240, 234, 0.58);
+  color: var(--text-muted);
   font-size: 13px;
 }
 
 .panel-top strong {
   color: #8db7d7;
   font-size: 12px;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.08em;
 }
 
 .live-panel h2 {
   margin: 26px 0;
-  color: #f2f0ea;
-  font-size: 28px;
-  font-weight: 520;
+  color: var(--text-primary);
+  font-size: 26px;
+  font-weight: var(--weight-heading);
+  line-height: 1.35;
 }
 
 .status-row {
@@ -254,7 +263,8 @@ button {
   gap: 12px;
   padding: 13px 0;
   border-top: 1px solid rgba(242, 240, 234, 0.1);
-  color: rgba(242, 240, 234, 0.82);
+  color: var(--text-body-color);
+  line-height: 1.55;
   animation: pulse-row 3s ease-in-out infinite;
 }
 
@@ -271,19 +281,28 @@ button {
 .booking-section {
   width: min(1180px, calc(100% - 40px));
   margin: 0 auto;
-  padding: 112px 0;
+  padding: 124px 0;
 }
 
 .section-heading {
-  max-width: 780px;
-  margin-bottom: 42px;
+  max-width: 860px;
+  margin-bottom: 52px;
 }
 
 .section-heading h2,
 .generator-banner h2,
 .booking-copy h2 {
-  font-size: clamp(34px, 5vw, 64px);
-  line-height: 1.12;
+  font-size: var(--text-h2);
+  line-height: var(--leading-heading);
+  text-wrap: balance;
+}
+
+.result-head h2,
+.planner-question h2 {
+  max-width: 720px;
+  font-size: clamp(34px, 4vw, 56px);
+  line-height: var(--leading-heading);
+  text-wrap: balance;
 }
 
 .value-grid {
@@ -314,7 +333,7 @@ button {
 }
 
 .value-card {
-  padding: 30px;
+  padding: 32px;
   min-height: 260px;
 }
 
@@ -335,8 +354,10 @@ button {
 .product-grid h3,
 .service-track h3 {
   margin: 0 0 14px;
-  color: #f2f0ea;
-  font-weight: 540;
+  color: var(--text-primary);
+  font-size: var(--text-h3);
+  font-weight: var(--weight-heading);
+  line-height: 1.35;
 }
 
 .value-card p,
@@ -353,12 +374,20 @@ button {
 .product-grid p,
 .service-track p,
 .booking-copy p {
-  color: rgba(242, 240, 234, 0.68);
-  line-height: 1.75;
+  max-width: 680px;
+  color: var(--text-body-color);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
 }
 
 .page-intro {
   max-width: 860px;
+}
+
+.page-intro > p:last-child {
+  max-width: 700px;
+  margin: 24px 0 0;
+  font-size: var(--text-body-lg);
 }
 
 .diagnosis-layout {
@@ -384,8 +413,9 @@ button {
 .question-block h3 {
   margin: 0 0 16px;
   color: #f2f0ea;
-  font-size: 22px;
-  font-weight: 540;
+  font-size: var(--text-h3);
+  font-weight: var(--weight-heading);
+  line-height: 1.45;
 }
 
 .diagnosis-summary {
@@ -400,9 +430,9 @@ button {
 }
 
 .diagnosis-summary span {
-  color: rgba(242, 240, 234, 0.5);
+  color: var(--text-muted);
   font-size: 12px;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
 }
 
@@ -445,7 +475,7 @@ button {
 
 .score-grid span {
   margin-top: 12px;
-  color: rgba(242, 240, 234, 0.66);
+  color: var(--text-muted);
 }
 
 .score-grid i {
@@ -495,7 +525,7 @@ button {
   border: 1px solid rgba(242, 240, 234, 0.14);
   border-radius: 999px;
   padding: 10px 14px;
-  color: rgba(242, 240, 234, 0.76);
+  color: var(--text-body-color);
   background: rgba(255, 255, 255, 0.05);
 }
 
@@ -538,7 +568,9 @@ button {
 .option-grid button {
   border: 1px solid rgba(242, 240, 234, 0.12);
   border-radius: 8px;
-  color: rgba(242, 240, 234, 0.78);
+  color: var(--text-body-color);
+  font-size: 15px;
+  line-height: 1.55;
   background: rgba(255, 255, 255, 0.04);
   cursor: pointer;
   text-align: left;
@@ -559,7 +591,8 @@ button {
 
 .timeline button strong {
   color: #e2bd76;
-  font-size: 18px;
+  font-size: 17px;
+  font-weight: 600;
 }
 
 .timeline button.active,
@@ -629,13 +662,17 @@ button {
 .scene-copy p {
   margin: 0 0 10px;
   color: #e2bd76;
-  font-size: 22px;
+  font-size: var(--text-body-lg);
+  font-weight: 560;
 }
 
 .scene-copy h3 {
   margin: 0 0 14px;
-  color: #f2f0ea;
-  font-size: clamp(34px, 5vw, 68px);
+  color: var(--text-primary);
+  font-size: clamp(28px, 3.2vw, 42px);
+  font-weight: var(--weight-heading);
+  line-height: 1.18;
+  text-wrap: balance;
 }
 
 .device-panel {
@@ -660,14 +697,15 @@ button {
 .budget-box span,
 .product-grid span {
   display: block;
-  color: rgba(242, 240, 234, 0.5);
-  font-size: 12px;
+  color: var(--text-muted);
+  font-size: 13px;
 }
 
 .device-panel strong {
   display: block;
   margin-top: 7px;
-  color: #f2f0ea;
+  color: var(--text-primary);
+  font-weight: 560;
 }
 
 .before-after-panel {
@@ -695,7 +733,8 @@ button {
 .before-after-panel span {
   display: block;
   margin-top: 8px;
-  color: rgba(242, 240, 234, 0.78);
+  color: var(--text-body-color);
+  line-height: 1.55;
 }
 
 .lab-layout,
@@ -716,6 +755,9 @@ button {
 .lab-cards button,
 .system-list button {
   padding: 18px;
+  font-size: 15px;
+  font-weight: 520;
+  line-height: 1.5;
 }
 
 .lab-detail {
@@ -740,7 +782,7 @@ button {
   position: relative;
   z-index: 1;
   max-width: 520px;
-  padding: 44px;
+  padding: 46px;
 }
 
 .lab-flow p {
@@ -748,7 +790,10 @@ button {
 }
 
 .lab-flow h3 {
-  font-size: clamp(34px, 5vw, 58px);
+  max-width: 460px;
+  font-size: clamp(28px, 3.4vw, 42px);
+  line-height: 1.18;
+  text-wrap: balance;
 }
 
 .flow-line {
@@ -782,7 +827,7 @@ button {
 }
 
 .system-preview h3 {
-  font-size: 38px;
+  font-size: clamp(24px, 2.5vw, 30px);
 }
 
 .system-preview dl {
@@ -797,7 +842,8 @@ button {
 
 .system-preview dd {
   margin: 4px 0 0;
-  color: rgba(242, 240, 234, 0.68);
+  color: var(--text-body-color);
+  line-height: 1.7;
 }
 
 .generator-banner {
@@ -811,6 +857,20 @@ button {
 
 .generator-banner > div {
   max-width: 720px;
+}
+
+.generator-banner h2 {
+  max-width: 720px;
+  font-size: clamp(40px, 4.6vw, 68px);
+  line-height: 1.14;
+}
+
+.generator-banner p:not(.eyebrow) {
+  max-width: 660px;
+  margin: 26px 0 0;
+  color: var(--text-body-color);
+  font-size: var(--text-body-lg);
+  line-height: var(--leading-body);
 }
 
 .planner-card {
@@ -845,6 +905,9 @@ button {
 .option-grid button {
   min-height: 78px;
   padding: 18px;
+  font-size: 15px;
+  font-weight: 520;
+  line-height: 1.5;
 }
 
 .planner-actions {
@@ -875,7 +938,8 @@ button {
 }
 
 .planner-summary p {
-  color: rgba(242, 240, 234, 0.68);
+  color: var(--text-body-color);
+  line-height: var(--leading-body);
 }
 
 .result-panel {
@@ -921,7 +985,8 @@ button {
 .room-config span {
   display: block;
   margin-top: 10px;
-  color: rgba(242, 240, 234, 0.74);
+  color: var(--text-body-color);
+  line-height: 1.65;
 }
 
 .disclaimer {
@@ -1040,7 +1105,7 @@ button {
 
 .case-grid article > div,
 .product-grid article > div {
-  padding: 24px;
+  padding: 26px;
 }
 
 .case-grid .ghost-button {
@@ -1089,18 +1154,25 @@ button {
 .case-detail-hero > div {
   position: relative;
   z-index: 1;
-  max-width: 760px;
+  max-width: 820px;
 }
 
 .case-detail-hero h1 {
   margin: 0 0 16px;
-  color: #f2f0ea;
-  font-size: clamp(42px, 6vw, 76px);
-  line-height: 1;
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  font-size: var(--text-h1);
+  font-weight: var(--weight-display);
+  line-height: 1.1;
+  letter-spacing: 0;
+  text-wrap: balance;
 }
 
 .case-detail-hero p {
-  color: rgba(242, 240, 234, 0.78);
+  max-width: 680px;
+  color: var(--text-body-color);
+  font-size: var(--text-body-lg);
+  line-height: var(--leading-body);
 }
 
 .detail-grid {
@@ -1138,11 +1210,12 @@ button {
 }
 
 .day-mini span {
-  color: rgba(242, 240, 234, 0.72);
+  color: var(--text-body-color);
+  line-height: 1.6;
 }
 
 .case-grid p {
-  color: rgba(242, 240, 234, 0.62);
+  color: rgba(245, 242, 235, 0.72);
 }
 
 .case-stats {
@@ -1164,8 +1237,9 @@ button {
 }
 
 .product-grid span {
-  color: #8db7d7;
-  letter-spacing: 0.12em;
+  color: rgba(160, 192, 214, 0.88);
+  font-size: 13px;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
 }
 
@@ -1176,7 +1250,7 @@ button {
 }
 
 .service-track article {
-  padding: 24px;
+  padding: 26px;
 }
 
 .service-track strong {
@@ -1191,6 +1265,8 @@ button {
 }
 
 .booking-section {
+  grid-template-columns: minmax(0, 1.05fr) minmax(420px, 0.85fr);
+  gap: clamp(36px, 6vw, 72px);
   align-items: start;
   padding-bottom: 140px;
 }
@@ -1202,6 +1278,17 @@ button {
 .booking-copy {
   position: sticky;
   top: 120px;
+}
+
+.booking-copy h2 {
+  max-width: 660px;
+  font-size: clamp(40px, 4vw, 56px);
+  line-height: 1.16;
+}
+
+.booking-copy > p:not(.eyebrow) {
+  margin: 26px 0 0;
+  font-size: var(--text-body-lg);
 }
 
 .booking-visual {
@@ -1227,6 +1314,8 @@ button {
   color: #f2f0ea;
   background: rgba(255, 255, 255, 0.06);
   font: inherit;
+  font-size: 16px;
+  line-height: 1.5;
 }
 
 .booking-form textarea {
@@ -1380,24 +1469,57 @@ button {
 }
 
 @media (max-width: 720px) {
+  :root {
+    --text-hero: clamp(40px, 11.5vw, 52px);
+    --text-h1: clamp(38px, 10vw, 52px);
+    --text-h2: clamp(32px, 8.8vw, 42px);
+    --text-h3: clamp(18px, 5.2vw, 23px);
+    --text-body-lg: 18px;
+  }
+
   .section,
   .generator-banner,
   .booking-section {
-    width: min(100% - 28px, 1180px);
-    padding: 78px 0;
+    width: min(100% - 40px, 1180px);
+    padding: 88px 0;
   }
 
   .hero-section {
     grid-template-columns: 1fr;
-    padding: 116px 14px 54px;
+    padding: 116px 20px 58px;
   }
 
   .hero-content h1 {
-    font-size: 48px;
+    max-width: 12em;
+    line-height: 1.08;
   }
 
   .hero-copy {
-    font-size: 16px;
+    max-width: 34em;
+    margin: 28px 0;
+    font-size: 17px;
+    line-height: 1.75;
+  }
+
+  .section-heading {
+    margin-bottom: 40px;
+  }
+
+  .generator-banner h2,
+  .result-head h2,
+  .planner-question h2 {
+    font-size: var(--text-h2);
+  }
+
+  .hero-actions {
+    gap: 10px;
+  }
+
+  .hero-actions a,
+  .hero-actions button {
+    min-height: 46px;
+    padding-inline: 15px;
+    font-size: 14px;
   }
 
   .live-panel,

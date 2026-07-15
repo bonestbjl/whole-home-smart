@@ -1,7 +1,25 @@
 :root {
-  font-family:
-    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --font-body: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --text-hero: clamp(56px, 5.5vw, 88px);
+  --text-h1: clamp(48px, 5vw, 76px);
+  --text-h2: clamp(40px, 4.2vw, 64px);
+  --text-h3: clamp(20px, 1.8vw, 26px);
+  --text-body-lg: clamp(18px, 1.45vw, 21px);
+  --text-body: 16px;
+  --text-small: 14px;
+  --weight-display: 600;
+  --weight-heading: 580;
+  --weight-medium: 520;
+  --leading-display: 1.06;
+  --leading-heading: 1.16;
+  --leading-body: 1.75;
+  --text-primary: rgba(245, 242, 235, 0.92);
+  --text-body-color: rgba(245, 242, 235, 0.8);
+  --text-muted: rgba(245, 242, 235, 0.62);
+  font-family: var(--font-body);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
   color: #f2f0ea;
   background: #07090c;
   font-synthesis: none;
@@ -23,6 +41,8 @@ body {
   min-width: 320px;
   margin: 0;
   background: #07090c;
+  font-family: var(--font-body);
+  font-weight: 400;
 }
 
 body::selection {
