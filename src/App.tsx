@@ -95,35 +95,36 @@ function HomePage() {
   return (
     <>
       <section className="hero-section page-home">
-        <img src={homeScene.image} alt="夜间高级现代住宅回家场景" className="hero-bg" style={{ objectPosition: homeScene.imagePosition }} />
-        <div className="hero-shade" />
         <div className="hero-content reveal">
-          <p className="eyebrow">Home Intelligence Diagnosis</p>
-          <h1>你的家，真的了解你的生活吗？</h1>
+          <p className="eyebrow">Home Intelligence</p>
+          <h1>
+            <span>让家，</span>
+            <span className="hero-title-line"><span className="hero-title-phrase">开始理解</span><span className="hero-title-phrase">你的生活。</span></span>
+          </h1>
           <p className="hero-copy">
-            用 2 分钟完成家庭智能诊断，看看哪些重复动作、生活焦虑和家庭需求，其实可以交给家自动完成。
+            从回家、离家到睡眠与家庭守护，让每一个重复动作，被系统自然接管。
           </p>
           <div className="hero-actions">
             <Link className="primary-button" to="/diagnosis">
-              开始家庭智能诊断
+              开始智能诊断
             </Link>
             <Link className="ghost-button" to="/experience">
-              先看看智能生活效果
+              查看智能生活效果
             </Link>
           </div>
         </div>
-        <div className="live-panel reveal" aria-label="智能住宅实时状态面板">
-          <div className="panel-top">
+        <div className="hero-visual reveal">
+          <img src={homeScene.image} alt="夜间高级现代住宅欢迎回家场景" style={{ objectPosition: homeScene.imagePosition }} />
+          <div className="hero-visual-shade" />
+          <div className="hero-welcome">
             <span>18:32</span>
-            <strong>主人回家</strong>
+            <strong>欢迎回家</strong>
           </div>
-          <h2>家正在自动切换状态</h2>
-          {homeScene.status.map((item, index) => (
-            <div className="status-row" key={item} style={{ animationDelay: `${index * 0.18}s` }}>
-              <span />
-              {item}
-            </div>
-          ))}
+          <div className="hero-status-list" aria-label="欢迎回家状态">
+            {['门锁识别成功', '玄关灯已开启', '室温 24℃', '窗帘已关闭'].map((item, index) => (
+              <span className="hero-status" key={item} style={{ animationDelay: `${0.25 + index * 0.16}s` }}><i />{item}</span>
+            ))}
+          </div>
         </div>
       </section>
 
